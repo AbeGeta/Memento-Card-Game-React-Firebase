@@ -67,53 +67,6 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-
-  self.addEventListener('fetch', (event) => {
-    // You can use event.request to get information about the request that's being made.
-    // You can use event.respondWith to create a custom response.
-    event.respondWith(new Response('Hello from the service worker!'));
-  });
 });
 
 // Any other custom service worker logic can go here.
-
-
-// Use the StaleWhileRevalidate strategy for any requests that match this pattern
-const matchCss = ({url}) => url.pathname.endsWith('.css');
-const matchJs = ({url}) => url.pathname.endsWith('.js');
-const matchPng = ({url}) => url.pathname.endsWith('.png');
-const matchJpg = ({url}) => url.pathname.endsWith('.jpg');
-
-const cssHandler = new StaleWhileRevalidate({
-    cacheName: 'css-cache',
-});
-const jsHandler = new StaleWhileRevalidate({
-    cacheName: 'js-cache',
-});
-const pngHandler = new StaleWhileRevalidate({
-    cacheName: 'png-cache',
-});
-const jpgHandler = new StaleWhileRevalidate({
-    cacheName: 'jpg-cache',
-});
-
-registerRoute(matchCss, cssHandler);
-registerRoute(matchJs, jsHandler);
-registerRoute(matchPng, pngHandler);
-registerRoute(matchJpg, jpgHandler);
-
-registerRoute(
-  // Match image requests
-  ({ request }) => request.destination === 'image',
-  // Use the stale-while-revalidate strategy.
-  new StaleWhileRevalidate({
-    // Use a custom cache name.
-    cacheName: 'images',
-    plugins: [
-      // Expire images after 7 days.
-      new ExpirationPlugin({
-        maxAgeSeconds: 7 * 24 * 60 * 60,
-      }),
-    ],
-  })
-);
