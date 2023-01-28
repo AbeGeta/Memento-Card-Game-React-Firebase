@@ -1,4 +1,4 @@
-# Memento-Card-Game-React-Firebase
+# Memento Card Game
 
 This is a memory game called Memento. The goal is to flip over two matching tiles in a row. Once you match all of them, it will add a win to your win counter.
 
